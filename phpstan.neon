@@ -1,0 +1,7 @@
+parameters:
+	level: max
+	paths:
+		- rules
+		- rules-tests
+	excludePaths:
+		- rules-tests/*/configured_rule.php
