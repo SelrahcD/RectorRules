@@ -9,6 +9,7 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
@@ -25,27 +26,7 @@ final class EncapsulateMethodCallWithFunctionCallRector extends AbstractRector i
 
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('"$this->something()" will be renamed to "aFunction($this->somethingElse())"', [new CodeSample(<<<'CODE_SAMPLE'
-class SomeClass {
-
-    public function aMethod() {
-        $this->anotherMethod();
-    }
-
-    public function anotherMethod() {}
-}
-CODE_SAMPLE
-, <<<'CODE_SAMPLE'
-class SomeClass {
-
-                public function aMethod() {
-                    myFunction($this->anotherMethod());
-                }
-
-                public function anotherMethod() {}
-            }
-CODE_SAMPLE
-)]);
+        return require_once __DIR__ . '/RuleDefinition.php';
     }
     /**
      * @return array<class-string<Node>>
