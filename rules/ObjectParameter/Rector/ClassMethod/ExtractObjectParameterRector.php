@@ -12,6 +12,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\NodeManipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
+use Rector\Symfony\Printer\NeighbourClassLikePrinter;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
@@ -27,7 +28,8 @@ final class ExtractObjectParameterRector extends AbstractRector implements Confi
     private array $extractions;
 
     public function __construct(
-        private readonly ClassInsertManipulator $classInsertManipulator
+        private readonly ClassInsertManipulator $classInsertManipulator,
+        private readonly NeighbourClassLikePrinter $neighbourClassLikePrinter,
     )
     {
     }
@@ -67,7 +69,16 @@ final class ExtractObjectParameterRector extends AbstractRector implements Confi
             return null;
         }
 
-        $this->nodesToAddCollector->addNodeAfterNode($objectParameterClass, $class);
+        $namespace = $this->betterNodeFinder->findParentType($class, Node\Stmt\Namespace_::class);
+
+        if(!$namespace instanceof Node\Stmt\Namespace_) {
+            return null;
+        }
+
+        $this->addClassToNamespace($objectParameterClass, $namespace);
+
+
+//        $this->nodesToAddCollector->addNodeAfterNode($objectParameterClass, $class);
 
         return $classMethod;
     }
@@ -185,5 +196,19 @@ final class ExtractObjectParameterRector extends AbstractRector implements Confi
             $classMethod
         );
         return $objectParameterClass;
+    }
+
+    private function addClassToNamespace(Class_ $objectParameterClass, Node\Stmt\Namespace_ $namespace): void
+    {
+        $newNamespace = clone $namespace;
+        $newNamespace->stmts[] = $objectParameterClass;
+
+        $this->printNewNodes($objectParameterClass, $newNamespace);
+    }
+
+    private function printNewNodes(Class_ $class, Node\Stmt\Namespace_ $mainNode): void
+    {
+        $smartFileInfo = $this->file->getSmartFileInfo();
+        $this->neighbourClassLikePrinter->printClassLike($class, $mainNode, $smartFileInfo, $this->file);
     }
 }

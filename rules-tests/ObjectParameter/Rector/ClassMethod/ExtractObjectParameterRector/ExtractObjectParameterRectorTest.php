@@ -9,11 +9,27 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 final class ExtractObjectParameterRectorTest extends AbstractRectorTestCase
 {
     /**
-     * @dataProvider provideData()
+     * @dataProvider provideDataSkip()
      */
-    public function test(\Symplify\SmartFileSystem\SmartFileInfo $fileInfo): void
+    public function testSkip(\Symplify\SmartFileSystem\SmartFileInfo $fileInfo): void
     {
         $this->doTestFileInfo($fileInfo);
+    }
+
+    /**
+    * @dataProvider provideData
+    */
+    public function test(\Symplify\SmartFileSystem\SmartFileInfo $fileInfo): void
+    {
+        $this->doTestFileInfoWithAdditionalChanges($fileInfo);
+    }
+
+    /**
+     * @return \Iterator<\Symplify\SmartFileSystem\SmartFileInfo>
+     */
+    public function provideDataSkip(): \Iterator
+    {
+        return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureSkip');
     }
 
     /**

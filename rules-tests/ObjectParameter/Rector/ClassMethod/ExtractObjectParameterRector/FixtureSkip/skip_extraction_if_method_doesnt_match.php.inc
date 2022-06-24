@@ -1,6 +1,6 @@
 <?php
 
-namespace SelrahcD\RectorRules\Tests\ObjectParameter\Rector\ClassMethod\ExtractObjectParameterRector\Fixture;
+namespace SelrahcD\RectorRules\Tests\ObjectParameter\Rector\ClassMethod\ExtractObjectParameterRector\FixtureSkip;
 
 class SomeClass {
 

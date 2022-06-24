@@ -1,9 +1,9 @@
 <?php
 
-namespace SelrahcD\RectorRules\Tests\ObjectParameter\Rector\ClassMethod\ExtractObjectParameterRector\Fixture;
+namespace SelrahcD\RectorRules\Tests\ObjectParameter\Rector\ClassMethod\ExtractObjectParameterRector\FixtureSkip;
 
-class SomeClass {
-
+class SomeClass
+{
     public function aMethod(string $aString, AnObject $anObject)
     {
     }
@@ -13,19 +13,28 @@ class SomeClass {
 -----
 <?php
 
-namespace SelrahcD\RectorRules\Tests\ObjectParameter\Rector\ClassMethod\ExtractObjectParameterRector\Fixture;
+namespace SelrahcD\RectorRules\Tests\ObjectParameter\Rector\ClassMethod\ExtractObjectParameterRector\FixtureSkip;
 
-class SomeClass {
-
-    public function aMethod(ObjectParameter $objectParameter)
-    {
-    }
-}
-class ObjectParameter
+class SomeClass
 {
-    public function __construct(public readonly string $aString, public readonly AnObject $anObject)
+    public function aMethod(ObjectParameter $objectParameter)
     {
     }
 }
 
 ?>
+-----
+ObjectParameter.php
+-----
+-----
+<?php
+
+namespace SelrahcD\RectorRules\Tests\ObjectParameter\Rector\ClassMethod\ExtractObjectParameterRector\FixtureSkip;
+
+class ObjectParameter
+{
+    public function __construct(public readonly string $aString, public readonly \SelrahcD\RectorRules\Tests\ObjectParameter\Rector\ClassMethod\ExtractObjectParameterRector\FixtureSkip\AnObject $anObject)
+    {
+    }
+}
+
