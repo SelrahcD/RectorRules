@@ -21,5 +21,8 @@
         "psr-4": {
             "SelrahcD\\RectorRules\\Tests\\" : "rules-tests"
         }
+    },
+    "scripts": {
+        "tests": "./vendor/bin/phpunit"
     }
 }
