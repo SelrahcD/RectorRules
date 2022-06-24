@@ -1,4 +1,4 @@
-# 2 Rules Overview
+# 3 Rules Overview
 
 ## EncapsulateMethodCallWithFunctionCallRector
 
@@ -107,6 +107,56 @@ return static function (RectorConfig $rectorConfig): void {
      public function aMethod() {
 -        $this->parentMethod();
 +        myFunction($this->parentMethod());
+     }
+ }
+```
+
+<br>
+
+## ExtractObjectParameterRector
+
+Extract an object parameter class for a method.
+
+Meant to be used in conjunction with [ReplaceMethodParameterWithObjectParameterRector](#replacemethodparameterwithobjectparameterrector).
+
+To clean up variable assignation after using this rule use [RemoveJustPropertyFetchRector](https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#removejustpropertyfetchrector).
+
+:wrench: **configure it!**
+
+- class: [`SelrahcD\RectorRules\ObjectParameter\Rector\ClassMethod\ExtractObjectParameterRector`](../rules/ObjectParameter/Rector/ClassMethod/ExtractObjectParameterRector.php)
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use Rector\Config\RectorConfig;
+use SelrahcD\RectorRules\ObjectParameter\Rector\ClassMethod\ExtractObjectParameter;
+use SelrahcD\RectorRules\ObjectParameter\Rector\ClassMethod\ExtractObjectParameterRector;
+
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->ruleWithConfiguration(ExtractObjectParameterRector::class, [new ExtractObjectParameter('SomeClass', 'aMethod', 'ObjectParameter')]);
+};
+```
+
+↓
+
+```diff
+ class SomeClass {
+
+-    public function aMethod(string $aString, AnObject $anObject) {
++    public function aMethod(ObjectParameter $objectParameter) {
++        $aString = $objectParameter->aString;
++        $anObject = $objectParameter->anObject;
++    }
++}
++
++class ObjectParameter {
++    public function __construct(
++     public readonly string $aString,
++     public readonly AnObject $anObject
++    )
++    {
      }
  }
 ```
