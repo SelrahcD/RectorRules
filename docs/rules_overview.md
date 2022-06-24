@@ -1,4 +1,4 @@
-# 1 Rules Overview
+# 2 Rules Overview
 
 ## EncapsulateMethodCallWithFunctionCallRector
 
@@ -107,6 +107,74 @@ return static function (RectorConfig $rectorConfig): void {
      public function aMethod() {
 -        $this->parentMethod();
 +        myFunction($this->parentMethod());
+     }
+ }
+```
+
+<br>
+
+## ReplaceMethodParameterWithObjectParameterRector
+
+Replace method parameter with object parameter
+
+:wrench: **configure it!**
+
+- class: [`SelrahcD\RectorRules\ObjectParameter\Rector\MethodCall\ReplaceMethodParameterWithObjectParameterRector`](../rules/ObjectParameter/Rector/MethodCall/ReplaceMethodParameterWithObjectParameterRector.php)
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use Rector\Config\RectorConfig;
+use SelrahcD\RectorRules\ObjectParameter\Rector\MethodCall\ReplaceMethodParameterWithObjectParameterRector;
+use SelrahcD\RectorRules\ObjectParameter\Rector\MethodCall\ReplaceMethodParametersWithObjectParameter;
+
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->ruleWithConfiguration(ReplaceMethodParameterWithObjectParameterRector::class, [new ReplaceMethodParametersWithObjectParameter('Dependency', 'methodCall', 'ObjectParameter')]);
+};
+```
+
+↓
+
+```diff
+ class SomeClass {
+
+     public function __construct(private Dependency $dependency)
+     {
+     }
+
+     public function aMethod() {
+-        $this->dependency->methodCall($a, $b, $c);
++        $this->dependency->methodCall(new \ObjectParameter($a, $b, $c));
+     }
+ }
+```
+
+<br>
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use Rector\Config\RectorConfig;
+use SelrahcD\RectorRules\ObjectParameter\Rector\MethodCall\ReplaceMethodParameterWithObjectParameterRector;
+use SelrahcD\RectorRules\ObjectParameter\Rector\MethodCall\ReplaceMethodParametersWithObjectParameter;
+
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->ruleWithConfiguration(ReplaceMethodParameterWithObjectParameterRector::class, [new ReplaceMethodParametersWithObjectParameter('SomeClass', 'anotherMethod', 'ObjectParameter')]);
+};
+```
+
+↓
+
+```diff
+ class SomeClass {
+
+     public function aMethod() {
+-        $this->anotherMethod($a, $b, $c);
++        $this->anotherMethod(new \ObjectParameter($a, $b, $c));
      }
  }
 ```
