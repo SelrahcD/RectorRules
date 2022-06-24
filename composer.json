@@ -24,7 +24,6 @@
         }
     },
     "scripts": {
-        "tests": "./vendor/bin/phpunit",
-        "documentation": "./vendor/bin/rule-doc-generator generate rules --ansi"
+        "tests": "./vendor/bin/phpunit"
     }
 }
