@@ -31,7 +31,7 @@ class SomeClass {
     public function aMethod() {
         $this->anotherMethod();
     }
-    
+
     public function anotherMethod() {}
 }
 CODE_SAMPLE
@@ -41,7 +41,7 @@ class SomeClass {
                 public function aMethod() {
                     myFunction($this->anotherMethod());
                 }
-                
+
                 public function anotherMethod() {}
             }
 CODE_SAMPLE
@@ -94,6 +94,5 @@ CODE_SAMPLE
             return false;
         }
 
-        return $this->isName($methodCall->name, $modification->methodName);
     }
 }
