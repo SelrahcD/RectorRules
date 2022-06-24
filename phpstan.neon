@@ -5,3 +5,4 @@ parameters:
 		- rules-tests
 	excludePaths:
 		- rules-tests/*/configured_rule.php
+		- rules-tests/*/Sources/*
