@@ -57,4 +57,4 @@ jobs:
                     commiter_name: GitHub Actions
                     committer_email: actions@github.com
                     message: 'Generate rules documentation'
-                    add: './docs/rules_overview.md'
+                    add: './docs/rules_overview.md --force'
