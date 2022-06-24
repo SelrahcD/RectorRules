@@ -94,5 +94,6 @@ CODE_SAMPLE
             return false;
         }
 
+        return $this->isName($methodCall->name, $modification->methodName);
     }
 }
