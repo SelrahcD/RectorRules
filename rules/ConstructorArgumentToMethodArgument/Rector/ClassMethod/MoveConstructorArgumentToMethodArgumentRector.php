@@ -18,7 +18,7 @@ final class MoveConstructorArgumentToMethodArgumentRector extends AbstractRector
 {
 
     /**
-     * @var array|Node\Expr[]|string[]
+     * @var string[]
      */
     private array $constructMethodParamNames = [];
 
@@ -89,7 +89,18 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->constructMethodParamNames = array_map(fn(Node\Param $param) => $param->var->name , $constructMethod->params);
+        $this->constructMethodParamNames = array_map(function (Node\Param $param) {
+
+            if(!$param->var instanceof Node\Expr\Variable) {
+                return '';
+            }
+
+            if(!is_string($param->var->name)) {
+                return '';
+            }
+
+            return $param->var->name;
+        }, $constructMethod->params);
 
 
         $executeMethod = $this->nodeFinder->findFirst($class, fn (Node $node) => $node instanceof ClassMethod && $this->isName($node->name, 'execute'));
@@ -110,13 +121,18 @@ CODE_SAMPLE
         return $class;
     }
 
-    private function refactorPropertyFetch(Node\Expr\PropertyFetch $node)
+    private function refactorPropertyFetch(Node\Expr\PropertyFetch $node): ?Node
     {
         if(!$this->isNames($node, $this->constructMethodParamNames)) {
             return null;
         }
 
+        if(!$node->name instanceof Node\Identifier) {
+            return null;
+        }
 
-        return new Node\Expr\Variable($node->name);
+        $name = $node->name->toString();
+
+        return new Node\Expr\Variable($name);
     }
 }
