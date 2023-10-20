@@ -33,17 +33,13 @@ return static function (RectorConfig $rectorConfig): void {
 ```diff
  class SomeClass {
 
--    public function aMethod() {
+     public function aMethod() {
 -        $this->anotherMethod();
--    }
-+                public function aMethod() {
-+                    myFunction($this->anotherMethod());
-+                }
++        myFunction($this->anotherMethod());
+     }
 
--    public function anotherMethod() {}
--}
-+                public function anotherMethod() {}
-+            }
+     public function anotherMethod() {}
+ }
 ```
 
 <br>
