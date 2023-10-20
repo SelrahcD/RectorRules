@@ -31,12 +31,12 @@ CODE_SAMPLE
         , <<<'CODE_SAMPLE'
 class SomeClass {
 
-                public function aMethod() {
-                    myFunction($this->anotherMethod());
-                }
+    public function aMethod() {
+        myFunction($this->anotherMethod());
+    }
 
-                public function anotherMethod() {}
-            }
+    public function anotherMethod() {}
+}
 CODE_SAMPLE
         , [new EncapsulateMethodCallWithFunctionCall('SomeClass', 'anotherMethod', 'myFunction')]
     ),
