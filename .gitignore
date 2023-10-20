@@ -2,3 +2,4 @@
 rector-recipe.php
 .phpunit.result.cache
 docs/rules_overview.md
+temp.php
