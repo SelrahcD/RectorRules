@@ -1,4 +1,4 @@
-# 3 Rules Overview
+# 4 Rules Overview
 
 ## EncapsulateMethodCallWithFunctionCallRector
 
@@ -153,6 +153,34 @@ return static function (RectorConfig $rectorConfig): void {
 +     public readonly AnObject $anObject
 +    )
 +    {
+     }
+ }
+```
+
+<br>
+
+## MoveConstructorArgumentToMethodArgumentRector
+
+Move constructor arguments to method arguments
+
+- class: [`SelrahcD\RectorRules\ConstructorArgumentToMethodArgument\Rector\ClassMethod\MoveConstructorArgumentToMethodArgumentRector`](../rules/ConstructorArgumentToMethodArgument/Rector/ClassMethod/MoveConstructorArgumentToMethodArgumentRector.php)
+
+```diff
+ class SomeClass {
+-
+-    public function __construct(
++     public function __construct(
+         private string $aParameter,
+         private bool $anotherParameter)
+     {
+     }
+
+-    public function execute() {
+-        $this->aParameter;
+-        $this->anotherParameter;
++    public function execute(string $aParameter, bool $anotherParameter) {
++       $aParameter;
++       $anotherParameter;
      }
  }
 ```
