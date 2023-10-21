@@ -37,40 +37,7 @@ final class MoveConstructorArgumentToMethodArgumentRector extends AbstractRector
 
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Move constructor arguments to method arguments', [
-            new ConfiguredCodeSample(<<<'CODE_SAMPLE'
-class SomeClass {
-
-    public function __construct(
-        private string $aParameter,
-        private bool $anotherParameter)
-    {
-    }
-
-    public function execute() {
-        $this->aParameter;
-        $this->anotherParameter;
-    }
-}
-CODE_SAMPLE
-, <<<'CODE_SAMPLE'
-class SomeClass {
-     public function __construct(
-        private string $aParameter,
-        private bool $anotherParameter)
-    {
-    }
-
-    public function execute(string $aParameter, bool $anotherParameter) {
-       $aParameter;
-       $anotherParameter;
-    }
-}
-CODE_SAMPLE,
-            [
-                new MoveConstructorArgumentToMethodArgumentParameter(SomeClass::class, 'execute')
-            ]
-)]);
+        require __DIR__ . '/RuleDefinition.php';
     }
 
     /**
