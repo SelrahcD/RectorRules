@@ -11,6 +11,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
@@ -36,7 +37,8 @@ final class MoveConstructorArgumentToMethodArgumentRector extends AbstractRector
 
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Move constructor arguments to method arguments', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Move constructor arguments to method arguments', [
+            new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass {
 
     public function __construct(
@@ -64,7 +66,10 @@ class SomeClass {
        $anotherParameter;
     }
 }
-CODE_SAMPLE
+CODE_SAMPLE,
+            [
+                new MoveConstructorArgumentToMethodArgumentParameter(SomeClass::class, 'execute')
+            ]
 )]);
     }
 
