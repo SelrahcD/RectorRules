@@ -26,7 +26,7 @@ final class EncapsulateMethodCallWithFunctionCallRector extends AbstractRector i
 
     public function getRuleDefinition() : RuleDefinition
     {
-        return require_once __DIR__ . '/RuleDefinition.php';
+        return require __DIR__ . '/RuleDefinition.php';
     }
     /**
      * @return array<class-string<Node>>
