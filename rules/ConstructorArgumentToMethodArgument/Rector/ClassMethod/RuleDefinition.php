@@ -37,6 +37,6 @@ class SomeClass {
 }
 CODE_SAMPLE,
         [
-            new MoveConstructorArgumentToMethodArgumentParameter(SomeClass::class, 'execute')
+            new MoveConstructorArgumentToMethodArgumentParameter('SomeClass', 'execute')
         ]
     )]);
