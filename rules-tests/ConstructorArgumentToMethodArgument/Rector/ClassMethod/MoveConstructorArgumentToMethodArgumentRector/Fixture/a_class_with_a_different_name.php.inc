@@ -2,7 +2,7 @@
 
 namespace SelrahcD\RectorRules\Tests\ConstructorArgumentToMethodArgument\Rector\ClassMethod\MoveConstructorArgumentToMethodArgumentRector\Fixture;
 
-class SomeClass {
+class AClassWithADifferentName {
 
     public function __construct(
         private string $aParameter,
@@ -24,7 +24,7 @@ class SomeClass {
 
 namespace SelrahcD\RectorRules\Tests\ConstructorArgumentToMethodArgument\Rector\ClassMethod\MoveConstructorArgumentToMethodArgumentRector\Fixture;
 
-class SomeClass {
+class AClassWithADifferentName {
 
     public function __construct()
     {

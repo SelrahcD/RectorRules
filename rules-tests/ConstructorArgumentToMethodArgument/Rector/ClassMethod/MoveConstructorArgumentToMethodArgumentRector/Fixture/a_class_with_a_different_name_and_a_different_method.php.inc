@@ -2,7 +2,7 @@
 
 namespace SelrahcD\RectorRules\Tests\ConstructorArgumentToMethodArgument\Rector\ClassMethod\MoveConstructorArgumentToMethodArgumentRector\Fixture;
 
-class SomeClass {
+class AClassWithADifferentNameAndADifferentMethod {
 
     public function __construct(
         private string $aParameter,
@@ -10,7 +10,7 @@ class SomeClass {
     {
     }
 
-    public function execute() {
+    public function aDifferentMethod() {
         $this->aParameter = null;
         $b = $this->anotherParameter;
 
@@ -24,13 +24,13 @@ class SomeClass {
 
 namespace SelrahcD\RectorRules\Tests\ConstructorArgumentToMethodArgument\Rector\ClassMethod\MoveConstructorArgumentToMethodArgumentRector\Fixture;
 
-class SomeClass {
+class AClassWithADifferentNameAndADifferentMethod {
 
     public function __construct()
     {
     }
 
-    public function execute(string $aParameter, bool $anotherParameter) {
+    public function aDifferentMethod(string $aParameter, bool $anotherParameter) {
         $aParameter = null;
         $b = $anotherParameter;
 

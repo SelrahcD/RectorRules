@@ -6,21 +6,29 @@ namespace SelrahcD\RectorRules\ConstructorArgumentToMethodArgument\Rector\ClassM
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Type\ObjectType;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Webmozart\Assert\Assert;
+
 /**
 
 * @see \Rector\Tests\ConstructorArgumentToMethodArgument\Rector\ClassMethod\MoveConstructorArgumentToMethodArgumentRector\MoveConstructorArgumentToMethodArgumentRectorTest
 */
-final class MoveConstructorArgumentToMethodArgumentRector extends AbstractRector
+final class MoveConstructorArgumentToMethodArgumentRector extends AbstractRector implements ConfigurableRectorInterface
 {
 
     /**
      * @var string[]
      */
     private array $constructMethodParamNames = [];
+    /**
+     * @var MoveConstructorArgumentToMethodArgumentParameter[]
+     */
+    private array $replacements;
 
     public function __construct(private readonly BetterNodeFinder $nodeFinder)
     {
@@ -59,6 +67,7 @@ class SomeClass {
 CODE_SAMPLE
 )]);
     }
+
     /**
      * @return array<class-string<Node>>
      */
@@ -71,18 +80,26 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if($node instanceof Class_) {
+        if ($node instanceof Class_) {
             return $this->refactorClass($node);
         }
-        elseif ($node instanceof Node\Expr\PropertyFetch) {
+        elseif($node instanceof Node\Expr\PropertyFetch) {
             return $this->refactorPropertyFetch($node);
         }
+        else {
+            return null;
+        }
 
-        return null;
     }
 
     private function refactorClass(Class_ $class): ?Node
     {
+        $matchingClassInConfiguration = $this->findMatchingClassInConfiguration($class);
+
+        if(!$matchingClassInConfiguration instanceof MoveConstructorArgumentToMethodArgumentParameter) {
+            return null;
+        }
+
         $constructMethod = $this->nodeFinder->findFirst($class, fn (Node $node) => $node instanceof ClassMethod && $this->isName($node->name, '__construct'));
 
         if(!$constructMethod instanceof ClassMethod) {
@@ -103,7 +120,9 @@ CODE_SAMPLE
         }, $constructMethod->params);
 
 
-        $executeMethod = $this->nodeFinder->findFirst($class, fn (Node $node) => $node instanceof ClassMethod && $this->isName($node->name, 'execute'));
+        $executeMethod = $this->nodeFinder->findFirst($class,
+            fn (Node $node) => $node instanceof ClassMethod && $this->isName($node->name, $matchingClassInConfiguration->methodName)
+        );
 
         if(!$executeMethod instanceof ClassMethod) {
             return null;
@@ -134,5 +153,29 @@ CODE_SAMPLE
         $name = $node->name->toString();
 
         return new Node\Expr\Variable($name);
+    }
+
+    /**
+     * @param MoveConstructorArgumentToMethodArgumentParameter[] $configuration
+     */
+    public function configure(array $configuration): void
+    {
+        Assert::allIsAOf($configuration, MoveConstructorArgumentToMethodArgumentParameter::class);
+        $this->replacements = $configuration;
+    }
+
+    private function findMatchingClassInConfiguration(Class_ $class): ?MoveConstructorArgumentToMethodArgumentParameter
+    {
+        foreach ($this->replacements as $replacement) {
+
+            $classToReplace = new ObjectType($replacement->className);
+
+            if($this->isObjectType($class, $classToReplace)){
+                return $replacement;
+            }
+
+        }
+
+        return null;
     }
 }
