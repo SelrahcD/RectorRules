@@ -37,7 +37,7 @@ final class MoveConstructorArgumentToMethodArgumentRector extends AbstractRector
 
     public function getRuleDefinition() : RuleDefinition
     {
-        require __DIR__ . '/RuleDefinition.php';
+        return require __DIR__ . '/RuleDefinition.php';
     }
 
     /**
