@@ -163,7 +163,25 @@ return static function (RectorConfig $rectorConfig): void {
 
 Move constructor arguments to method arguments
 
+:wrench: **configure it!**
+
 - class: [`SelrahcD\RectorRules\ConstructorArgumentToMethodArgument\Rector\ClassMethod\MoveConstructorArgumentToMethodArgumentRector`](../rules/ConstructorArgumentToMethodArgument/Rector/ClassMethod/MoveConstructorArgumentToMethodArgumentRector.php)
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use Rector\Config\RectorConfig;
+use SelrahcD\RectorRules\ConstructorArgumentToMethodArgument\Rector\ClassMethod\MoveConstructorArgumentToMethodArgumentParameter;
+use SelrahcD\RectorRules\ConstructorArgumentToMethodArgument\Rector\ClassMethod\MoveConstructorArgumentToMethodArgumentRector;
+
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->ruleWithConfiguration(MoveConstructorArgumentToMethodArgumentRector::class, [new MoveConstructorArgumentToMethodArgumentParameter('SomeClass', 'execute')]);
+};
+```
+
+↓
 
 ```diff
  class SomeClass {
